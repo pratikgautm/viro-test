@@ -1,0 +1,49 @@
+name: Release Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16' # Adjust Node.js version as needed
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'  # Recommended distribution
+          java-version: '11'       # Or whichever version you require
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the project
+        run: npm run build
+
+      - name: Make prepare_release.sh executable
+        run: chmod +x ./prepare_release.sh
+
+      - name: Run prepare_release script
+        run: ./prepare_release.sh
+
+      - name: Upload build artifacts (optional)
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-artifacts
+          path: |
+            ./*.tgz
+            android/react_viro/*.aar
