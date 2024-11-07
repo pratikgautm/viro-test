@@ -25,7 +25,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'  # Recommended distribution
-          java-version: '11'       # Or whichever version you require
+          java-version: '17'       # Or whichever version you require
 
       - name: Install dependencies
         run: npm install
